@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
+	<!-- we can use annotation -->
+	<context:annotation-config />
+	<!-- package to look for annotated class -->
+	<context:component-scan
+		base-package="org.timesheet.service.impl" />
+	<!-- We will manage transaction with annotation -->
+	<tx:annotation-driven />
+	<!-- datasource for our database -->
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName"
+			value="com.mysql.jdbc.Driver" />
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/timesheet" />
+		<property name="username" value="root" />
+		<property name="password" value="root" />
+	</bean>
+	
+	<!-- Configure hibernate session factory -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+	<property name="dataSource" ref="dataSource" />
+	<property name="annotatedClasses"  >
+	<list>
+	<value>org.timesheet.domain.Employee</value>
+	<value>org.timesheet.domain.Manager</value>
+	<value>org.timesheet.domain.Task</value>
+	<value>org.timesheet.domain.Timesheet</value>
+	</list>
+	</property>
+	<property name="hibernateProperties">
+	<props>
+	<prop key="dialect">org.hibernate.dialect.MySQLDialect</prop>
+	<prop key="hibernate.show_sql">true</prop>
+	<prop key="hibernate.hbm2ddl.auto">update</prop>
+	</props>
+	</property>
+	</bean>
+
+
+</beans>
